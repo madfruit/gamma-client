@@ -1,38 +1,42 @@
 import * as React from "react"
 import {
-  ChakraProvider,
-  Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
-  theme,
+    BrowserRouter,
+    Route,
+    Routes
+} from "react-router-dom";
+import {
+    ChakraProvider,
 } from "@chakra-ui/react"
-import { ColorModeSwitcher } from "./ColorModeSwitcher"
-import { Logo } from "./Logo"
+import theme from './theme'
+import Header from "./components/header";
+import Home from "./views/home";
+import Login from "./views/login";
+import Register from "./views/register";
+import {Provider} from 'react-redux';
+import {store} from "./store";
+import Article from "./views/article";
+import Logout from "./components/logout";
+import Admin from "./views/admin";
+import WriteArticle from "./views/writeArticle";
 
-export const App = () => (
-  <ChakraProvider theme={theme}>
-    <Box textAlign="center" fontSize="xl">
-      <Grid minH="100vh" p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
-        <VStack spacing={8}>
-          <Logo h="40vmin" pointerEvents="none" />
-          <Text>
-            Edit <Code fontSize="xl">src/App.tsx</Code> and save to reload.
-          </Text>
-          <Link
-            color="teal.500"
-            href="https://chakra-ui.com"
-            fontSize="2xl"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn Chakra
-          </Link>
-        </VStack>
-      </Grid>
-    </Box>
-  </ChakraProvider>
-)
+export const App = () => {
+    return (
+        <ChakraProvider theme={theme}>
+            <BrowserRouter>
+                <Provider store={store}>
+                    <Header/>
+                    <Routes>
+                        <Route path="/" Component={Home}/>
+                        <Route path="/articles/:id" Component={Article}/>
+                        <Route path="/users/login" Component={Login}/>
+                        <Route path="/users/register" Component={Register}/>
+                        <Route path="/users/logout" Component={Logout}/>
+                        <Route path="/admin" Component={Admin}/>
+                        <Route path="/admin/writeArticle" Component={WriteArticle}/>
+                        {/*<Route path="/admin/reviewArticle" Component={Admin}/>*/}
+                    </Routes>
+                </Provider>
+            </BrowserRouter>
+        </ChakraProvider>
+    );
+}
