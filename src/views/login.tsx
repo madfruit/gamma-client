@@ -21,8 +21,8 @@ import {useNavigate} from "react-router-dom";
 import request from "../helpers/request";
 
 const schema = yup.object({
-    email: yup.string().email().required(),
-    password: yup.string().min(5).max(30).required(),
+    email: yup.string().email('Поле має бути e-mail').required('E-mail-обов\'язкове поле'),
+    password: yup.string().min(5, 'Мінімальна довжина пароля-5 символів').max(30, 'Максимальна довжина пароля-30 символів').required('Пароль-обов\'язкове поле'),
 }).required();
 
 type FormData = yup.InferType<typeof schema>;
@@ -47,6 +47,7 @@ const Login: React.FC = () => {
         console.log(tokens);
         localStorage.setItem('access', tokens!.access);
         localStorage.setItem('refresh', tokens!.refresh);
+
         return navigate('/');
     }
 

@@ -1,16 +1,22 @@
 import React, {useEffect} from "react";
-import {Role} from "package-types";
-import {useAppSelector} from "../hooks";
+import {AuthResult, Role} from "package-types";
+import {useAppDispatch, useAppSelector} from "../hooks";
 import {useNavigate, Link as ReactLink} from "react-router-dom";
 import {Heading, Box, Link, Flex} from '@chakra-ui/react';
+import request from "../helpers/request";
+import {AxiosResponse} from "axios";
 
 const Admin: React.FC = (): JSX.Element => {
-    const currentUser = useAppSelector(state => state.user.value);
+    let currentUser = useAppSelector(state => state.user.value);
     const allowedRoles = [Role.ADMIN, Role.AUTHOR, Role.MODERATOR] as string[];
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const fetchData = async () => {
+        if(!currentUser) {
+            const {data} = await request.get<undefined, AxiosResponse<AuthResult>>('/users/auth');
+        }
         if(!currentUser || !allowedRoles.includes(currentUser.role)) {
-            return navigate('/users/login');
+            return navigate('/error403');
         }
     }
     useEffect(() => {
@@ -23,18 +29,22 @@ const Admin: React.FC = (): JSX.Element => {
         case Role.AUTHOR:
             return (
                 <Box>
-                    <Heading>Welcome to the {currentUser.role} page!</Heading>
+                    <Heading m={5}>Welcome to the {currentUser.role} page!</Heading>
                     <Flex>
-                        <Link as={ReactLink} to={'/admin/writeArticle'}>
-                            <Box>
-                                Write an article
-                            </Box>
-                        </Link>
-                        <Link as={ReactLink} to={'/admin/reviewArticle'}>
-                            <Box>
-                                Review an article
-                            </Box>
-                        </Link>
+                        <Box m={5}>
+                            <Link as={ReactLink} to={'/articles/writeArticle'}>
+                                <Box>
+                                    Write an article
+                                </Box>
+                            </Link>
+                        </Box>
+                        <Box m={5}>
+                            <Link as={ReactLink} to={'/admin/reviewArticles'}>
+                                <Box>
+                                    Review an article
+                                </Box>
+                            </Link>
+                        </Box>
                     </Flex>
                 </Box>
             );
@@ -42,12 +52,28 @@ const Admin: React.FC = (): JSX.Element => {
             return (
                 <Box>
                     <Heading>Welcome to the {currentUser.role} page!</Heading>
+                    <Box m={5}>
+                        <Link as={ReactLink} to={'/admin/manageRoles'}>
+                            <Box>
+                                Manage roles
+                            </Box>
+                        </Link>
+                    </Box>
                 </Box>
             );
         case Role.MODERATOR:
             return (
                 <Box>
                     <Heading>Welcome to the {currentUser.role} page!</Heading>
+                    <Flex>
+                        <Box m={5}>
+                            <Link as={ReactLink} to={'/admin/getReports'}>
+                                <Box>
+                                    Get reported comments
+                                </Box>
+                            </Link>
+                        </Box>
+                    </Flex>
                 </Box>
             );
         default: return (<Box></Box>);

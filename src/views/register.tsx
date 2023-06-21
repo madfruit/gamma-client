@@ -21,9 +21,9 @@ import {useNavigate} from 'react-router-dom';
 
 const schema = yup.object({
     email: yup.string().email().required(),
-    nickname: yup.string().min(3).max(50).required(),
-    password: yup.string().min(5).max(30).required(),
-    passwordConfirmation: yup.string().oneOf([yup.ref('password'), undefined], 'Passwords must match').required(),
+    nickname: yup.string().min(3, 'Мінімальна довжина нікнейма-3 символи').max(50, 'Максимальна довжина нікнейма-50 символів').required('Нікнейм-обов\'язкове поле'),
+    password: yup.string().min(5, 'Мінімальна довжина пароля-5 символів').max(30, 'Максимальна довжина пароля-30 символів').required('Пароль-обов\'язкове поле'),
+    passwordConfirmation: yup.string().oneOf([yup.ref('password'), undefined], 'Паролі мають співпадати').required(),
     avatar: yup.mixed(),
 }).required();
 
@@ -41,12 +41,11 @@ const Register: React.FC = () => {
                 'Content-Type': 'multipart/form-data'
             }
         });
-        console.log(data);
         if (!data.success) {
             setError(data.message ?? 'Помилка реєстрації');
             return;
         }
-        return navigate("/login");
+        return navigate("/users/login");
     }
 
     const onSubmit = (data: FormData) => {
@@ -84,7 +83,7 @@ const Register: React.FC = () => {
                         </Box>
                         <Box mt={4}>
                             <FormLabel>Avatar</FormLabel>
-                            <Input type="file" placeholder="Select avatar" {...register('avatar')}/>
+                            <Input type="file" placeholder="Select avatar" {...register('avatar')} border={'none'}/>
                         </Box>
                     </CardBody>
                     <CardFooter>

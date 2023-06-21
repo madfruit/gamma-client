@@ -3,6 +3,8 @@ import config from "../env/env";
 import {AxiosResponse} from 'axios';
 import {Tokens} from "../features/tokenSlicer";
 import {RefreshPayload, RefreshResult} from "package-types";
+import {store} from "../store";
+import {removeUser, setUser} from "../features/userSlicer";
 
 const request = axios.create({
     baseURL: `${config.beUrl}`,
@@ -17,7 +19,8 @@ const refreshTokens = async (): Promise<Tokens | undefined> => {
         const {data} = await request.post<RefreshPayload, AxiosResponse<RefreshResult, any>>(`/users/refresh/`, { refresh: refreshToken });
         console.log(data);
         if(!data.tokens) {
-            throw new Error('No tokens received from server');
+            store.dispatch(removeUser());
+            return ;
         }
         const { access, refresh } = data.tokens;
         localStorage.setItem('access', access);
@@ -44,25 +47,33 @@ request.interceptors.request.use(
 
 request.interceptors.response.use(
     (response) => {
+        store.dispatch(setUser(response.data.currentUser));
         return response;
     },
     async function (error) {
-        const originalRequest = error.config;
-        if (error.response.status === 401 && !originalRequest._retry) {
-            originalRequest._retry = true;
-            const res = await refreshTokens();
-            if (!res?.access || !res?.refresh) {
-                throw new Error('Cannot get access and refresh token from server');
+        try {
+            const originalRequest = error.config;
+            if (error.response.status === 401 && !originalRequest._retry) {
+                originalRequest._retry = true;
+                const res = await refreshTokens();
+                if (!res?.access || !res?.refresh) {
+                    throw new Error('Cannot get access and refresh token from server');
+                }
+                const {access} = res;
+
+
+                request.defaults.headers.common[
+                    "Authorization"
+                    ] = `${access}`;
+                return request(originalRequest);
             }
-            const {access} = res;
+            switch (error.status) {
 
-
-            request.defaults.headers.common[
-                "Authorization"
-                ] = `${access}`;
-            return request(originalRequest);
+            }
+            return Promise.reject(error);
+        } catch (err) {
+            console.log(err);
         }
-        return Promise.reject(error);
     }
 );
 

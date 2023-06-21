@@ -9,12 +9,11 @@ type HeaderProps = {
 
 const UserBox: React.FC<HeaderProps> = (props) => {
     const { user } = props;
-    console.log(user);
     if(!user) {
         return (
             <Box p={4}>
-                <Link as={ReactLink}  to='/users/login' colorScheme="teal" m={4} >Log In</Link>
-                <Link as={ReactLink} to='/users/register' colorScheme="teal" m={4}>Register</Link>
+                <Link as={ReactLink}  to='/users/login' colorScheme="teal" m={4} >Увійти</Link>
+                <Link as={ReactLink} to='/users/register' colorScheme="teal" m={4}>Зареєструватись</Link>
             </Box>
         );
     }
@@ -24,17 +23,23 @@ const UserBox: React.FC<HeaderProps> = (props) => {
             <Box m={5}>
             {user.avatar
                 ? <Image src={avatar} alt='no pic here' borderRadius='full' w={50}/>
-                : <Image src='https://picsum.photos/50' alt='no pic here' borderRadius='full'/>}
+                : <Image
+                    w={50} borderRadius={25}
+                    src={`${process.env.PUBLIC_URL}/images/avatar-placeholder.jpg`}
+                    alt={'no avatar here'}/>
+            }
             </Box>
             <Box>
-                <Text fontSize="lg">{nickname}</Text>
+                <Link as={ReactLink} to={`/users/${user.id}`}>
+                    <Text fontSize="lg">{nickname}</Text>
+                </Link>
                 <Text fontSize="lg">{email}</Text>
             </Box>
             {role !== Role.USER?
             <Box m={10}>
                 <Link as={ReactLink} to={'/admin'}>
                     <Text>
-                        {role} panel
+                        {role}
                     </Text>
                 </Link>
             </Box>
@@ -42,7 +47,7 @@ const UserBox: React.FC<HeaderProps> = (props) => {
                 }
                 <Link as={ReactLink} to={'/users/logout'}>
                     <Text>
-                        Log out
+                        Вийти
                     </Text>
                 </Link>
         </Flex>
