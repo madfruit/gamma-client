@@ -51,7 +51,7 @@ const Article: React.FC<ArticleProps> = (props): JSX.Element => {
                             <Image w={100} borderRadius={50}
                                    src={`${process.env.PUBLIC_URL}/images/avatar-placeholder.jpg`}
                                    alt={'no avatar here'}/>
-                            <Text>Deleted author</Text>
+                            <Text>Видалений автор</Text>
                         </Box>
                     }
                     {article.reviewer
@@ -71,10 +71,10 @@ const Article: React.FC<ArticleProps> = (props): JSX.Element => {
                                 <Image w={100} borderRadius={50}
                                        src={`${process.env.PUBLIC_URL}/images/avatar-placeholder.jpg`}
                                        alt={'no avatar here'}/>
-                                <Text>Deleted reviewer</Text>
+                                <Text>Видалений рецензент</Text>
                             </Box>
                             : <Box>
-                                <Text>No reviewer</Text>
+                                <Text>Рецензії не було</Text>
                             </Box>
                     }
                 </Box>

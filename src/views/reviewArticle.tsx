@@ -23,7 +23,7 @@ import {
     RejectArticleResult,
 } from "package-types";
 import {AxiosResponse} from 'axios';
-import {Link as ReactLink, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {useParams} from "react-router-dom";
 import {DrawerCloseButton} from "@chakra-ui/react";
 import {DrawerHeader} from "@chakra-ui/react";
@@ -51,6 +51,7 @@ const ReviewArticle: React.FC<ArticleProps> = (props): JSX.Element => {
             setArticle(fetchedArticle);
         }
         const {data: remarksData} = await request.get<undefined, AxiosResponse<GetRemarksResult>>(`/article/getRemarks/${id}`);
+        console.log(remarksData);
         setFetchedRemarks(remarksData.remarks);
     }
     useEffect(() => {

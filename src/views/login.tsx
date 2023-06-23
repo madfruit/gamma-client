@@ -59,7 +59,7 @@ const Login: React.FC = () => {
         <Center>
             <Card m={5} w={350} align='center'>
                 <CardHeader>
-                    Log in
+                    Увійти
                 </CardHeader>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <CardBody>
@@ -69,14 +69,14 @@ const Login: React.FC = () => {
                             <Text p={4} color={'red'}>{errors.email?.message}</Text>
                         </Box>
                         <Box mt={4}>
-                            <FormLabel>Password</FormLabel>
+                            <FormLabel>Пароль</FormLabel>
                             <Input type="password" id={'password'} placeholder="Password" {...register('password')}/>
                             <Text p={4} color={'red'}>{errors.password?.message}</Text>
                         </Box>
                     </CardBody>
                     <CardFooter>
                         <Button type="submit" colorScheme="teal" mt={4}>
-                            Log In
+                            Увійти
                         </Button>
                         <Text p={4} color={'red'}>{error}</Text>
                     </CardFooter>

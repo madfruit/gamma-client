@@ -49,12 +49,16 @@ const ManageRoles: React.FC<ArticleProps> = (props): JSX.Element => {
         setUsers(data.users);
     }
 
+    const onNicknameInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setNickname(e.target.value);
+    }
+
     return (
         <Box>
             <Flex>
                 <Text m={5}>Оберіть роль для пошуку</Text>
                 <InputGroup size='lg' m={3} w={1000}>
-                    <Input onChange={() => setNickname} placeholder={'Пошук по нікнейму'}/>
+                    <Input onChange={onNicknameInputChange} placeholder={'Пошук по нікнейму'}/>
                     <InputRightElement mt={1} width='6.5rem' height={'2.5rem'}>
                         <Button m={2} h='1.75rem' size='lg' onClick={onSearchButtonClick}>Шукати</Button>
                     </InputRightElement>

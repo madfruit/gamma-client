@@ -127,7 +127,7 @@ const ArticlesList: React.FC<ArticlesListProps> = (props): JSX.Element => {
                                         </Flex>
                                         <Text maxW={'prose'} dangerouslySetInnerHTML={{__html: article.text}}/>
                                         {!article.posted && (
-                                            <Text>Not posted yet</Text>
+                                            <Text>Не опубліковано</Text>
                                         )
                                         }
                                     </Box>

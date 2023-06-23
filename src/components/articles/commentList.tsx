@@ -61,7 +61,7 @@ const CommentsList: React.FC<CommentProps> = (props): JSX.Element => {
                                     </Link>)
                                 : (
                                     <Text fontSize={'2xl'} key={comment.id}
-                                          ml={5}>`Deleted user</Text>
+                                          ml={5}>Видалений користувач</Text>
                                 )
                             }
                             <Text ml={100}>{new Date(comment.createdAt).toLocaleString('uk-UA')}</Text>

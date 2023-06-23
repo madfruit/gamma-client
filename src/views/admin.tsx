@@ -1,10 +1,8 @@
 import React, {useEffect} from "react";
-import {AuthResult, Role} from "package-types";
+import {Role} from "package-types";
 import {useAppDispatch, useAppSelector} from "../hooks";
 import {useNavigate, Link as ReactLink} from "react-router-dom";
 import {Heading, Box, Link, Flex} from '@chakra-ui/react';
-import request from "../helpers/request";
-import {AxiosResponse} from "axios";
 
 const Admin: React.FC = (): JSX.Element => {
     let currentUser = useAppSelector(state => state.user.value);
@@ -12,9 +10,6 @@ const Admin: React.FC = (): JSX.Element => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const fetchData = async () => {
-        if(!currentUser) {
-            const {data} = await request.get<undefined, AxiosResponse<AuthResult>>('/users/auth');
-        }
         if(!currentUser || !allowedRoles.includes(currentUser.role)) {
             return navigate('/error403');
         }

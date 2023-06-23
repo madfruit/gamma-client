@@ -39,15 +39,20 @@ const WriteArticle: React.FC = (): JSX.Element => {
             allowedSchemes: [ 'data', 'http', 'https']
         });
         if(title && text) {
-            const {data} = await request.post<RequestAddArticlePayload, AxiosResponse<RequestAddArticleResult>>(`${config.beUrl}/article/proposeArticle`, {
-                title: sanitizedTitle,
-                text: sanitizedText,
-                authorId: currentUser.id,
-                tags,
-                image
-            });
-            if (data.article) {
-                return navigate('/articles/myArticles');
+            try {
+                const {data} = await request.post<RequestAddArticlePayload, AxiosResponse<RequestAddArticleResult>>(`${config.beUrl}/article/proposeArticle`, {
+                    title: sanitizedTitle,
+                    text: sanitizedText,
+                    authorId: currentUser.id,
+                    tags,
+                    image
+                });
+                if (data.article) {
+                    return navigate('/articles/myArticles');
+                }
+            } catch (err) {
+                setSendErrorMessage('Не вдалось запропонувати статтю. Пам\'ятайте, що всі наявні поля є обов\'язковими для заповнення');
+                console.log(err);
             }
         }
     }
@@ -131,6 +136,7 @@ const WriteArticle: React.FC = (): JSX.Element => {
             <Input mb={5} type={'text'} value={tag} placeholder={'Теги'} onChange={onTagsChange} onKeyPress={onTagInputKeyPress} />
             <Heading mt={5} mb={5}>Текст</Heading>
             <ReactQuill theme="snow" value={text} onChange={setText} modules={quillModules} />
+            <Text color={'red'} m={2}>{sendErrorMessage}</Text>
             <Button mt={5} onClick={onClick}>
                 Готово
             </Button>

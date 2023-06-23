@@ -202,31 +202,6 @@ const EditArticle: React.FC = (): JSX.Element => {
                                         </Box>
                                     )
                                 })}
-                            {
-                                remarks.map((remark, index) => {
-                                    return (
-                                        <Box key={index}>
-                                            {remark.author
-                                                ? <Link as={ReactLink} to={`/users/${remark.authorId}`}>
-                                                    <Image
-                                                        w={50} borderRadius={25}
-                                                        src={remark.author.avatar ? remark.author.avatar : `${process.env.PUBLIC_URL}/images/avatar-placeholder.jpg`}
-                                                        alt={'no avatar here'}/>
-                                                    <Text>{remark.author.nickname}</Text>
-                                                </Link>
-                                                : <Box>
-                                                    <Image
-                                                        w={50} borderRadius={25}
-                                                        src={`${process.env.PUBLIC_URL}/images/avatar-placeholder.jpg`}
-                                                        alt={'no avatar here'}/>
-                                                    <Text>Deleted reviewer</Text>
-                                                </Box>
-                                            }
-                                            <Text>{remark.text}</Text>
-                                            <Divider/>
-                                        </Box>
-                                    )
-                                })}
                         </Box>
                     </DrawerBody>
 
@@ -263,6 +238,29 @@ const EditArticle: React.FC = (): JSX.Element => {
                        onChange={onTagsChange} onKeyPress={onTagInputKeyPress}/>
                 <Heading mt={5} mb={5}>Текст</Heading>
                 <ReactQuill theme="snow" value={text} onChange={setText} modules={quillModules}/>
+                {article && article.reviewer
+                    ? <Box>
+                        <Text>Рецензент: </Text>
+                        <Link as={ReactLink} to={`/users/${article.authorId}`}>
+                            <Image
+                                w={100} borderRadius={50}
+                                src={article.reviewer.avatar ? article.reviewer.avatar : `${process.env.PUBLIC_URL}/images/avatar-placeholder.jpg`}
+                                alt={'no avatar here'}/>
+                            <Text>{article.reviewer.nickname}</Text>
+                        </Link>
+                    </Box>
+                    : article && article.reviewerId
+                        ?
+                        <Box>
+                            <Image w={100} borderRadius={50}
+                                   src={`${process.env.PUBLIC_URL}/images/avatar-placeholder.jpg`}
+                                   alt={'no avatar here'}/>
+                            <Text>Видалений рецензент</Text>
+                        </Box>
+                        : <Box>
+                            <Text>Рецензії поки не було</Text>
+                        </Box>
+                }
                 <Button mt={5} onClick={onClick}>
                     Готово
                 </Button>

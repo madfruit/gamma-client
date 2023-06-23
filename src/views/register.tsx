@@ -20,11 +20,11 @@ import {RegisterPayload, RegisterResult} from 'package-types';
 import {useNavigate} from 'react-router-dom';
 
 const schema = yup.object({
-    email: yup.string().email().required(),
+    email: yup.string().email('Поле має бути e-mail').required('E-mail-обов\'язкове поле'),
     nickname: yup.string().min(3, 'Мінімальна довжина нікнейма-3 символи').max(50, 'Максимальна довжина нікнейма-50 символів').required('Нікнейм-обов\'язкове поле'),
     password: yup.string().min(5, 'Мінімальна довжина пароля-5 символів').max(30, 'Максимальна довжина пароля-30 символів').required('Пароль-обов\'язкове поле'),
     passwordConfirmation: yup.string().oneOf([yup.ref('password'), undefined], 'Паролі мають співпадати').required(),
-    avatar: yup.mixed(),
+    avatar: yup.mixed()
 }).required();
 
 type FormData = yup.InferType<typeof schema>;
@@ -57,7 +57,7 @@ const Register: React.FC = () => {
         <Center>
             <Card m={5} w={350} align='center'>
                 <CardHeader>
-                    Log in
+                    Реєстрація
                 </CardHeader>
                 <form onSubmit={handleSubmit(onSubmit)} encType={'multipart/form-data'}>
                     <CardBody>
@@ -67,28 +67,28 @@ const Register: React.FC = () => {
                             <Text p={4} color={'red'}>{errors.email?.message}</Text>
                         </Box>
                         <Box mt={4}>
-                            <FormLabel>Nickname</FormLabel>
+                            <FormLabel>Нікнейм</FormLabel>
                             <Input type="text" placeholder="Nickname" {...register('nickname')}/>
                             <Text p={4} color={'red'}>{errors.nickname?.message}</Text>
                         </Box>
                         <Box mt={4}>
-                            <FormLabel>Password</FormLabel>
+                            <FormLabel>Пароль</FormLabel>
                             <Input type="password" placeholder="Password" {...register('password')}/>
                             <Text p={4} color={'red'}>{errors.password?.message}</Text>
                         </Box>
                         <Box mt={4}>
-                            <FormLabel>Confirm password</FormLabel>
+                            <FormLabel>Повторіть пароль</FormLabel>
                             <Input type="password" placeholder="Confirm password" {...register('passwordConfirmation')}/>
                             <Text p={4} color={'red'}>{errors.password?.message}</Text>
                         </Box>
                         <Box mt={4}>
-                            <FormLabel>Avatar</FormLabel>
+                            <FormLabel>Аватар</FormLabel>
                             <Input type="file" placeholder="Select avatar" {...register('avatar')} border={'none'}/>
                         </Box>
                     </CardBody>
                     <CardFooter>
                         <Button type="submit" colorScheme="teal" mt={4}>
-                            Register
+                            Зареєструватись
                         </Button>
                         <Text p={4} color={'red'}>{error}</Text>
                     </CardFooter>
