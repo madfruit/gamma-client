@@ -39,7 +39,7 @@ const Article: React.FC<ArticleProps> = (props): JSX.Element => {
                     </Box>
                     {article.author
                         ? <Box>
-                            <Text>Author: </Text>
+                            <Text>Автор: </Text>
                             <Link as={ReactLink} to={`/users/${article.authorId}`}>
                                 <Image w={100} borderRadius={50}
                                        src={article.author.avatar ? article.author.avatar : `${process.env.PUBLIC_URL}/images/avatar-placeholder.jpg`}
@@ -56,7 +56,7 @@ const Article: React.FC<ArticleProps> = (props): JSX.Element => {
                     }
                     {article.reviewer
                         ? <Box>
-                            <Text>Reviewer: </Text>
+                            <Text>Рецензент: </Text>
                             <Link as={ReactLink} to={`/users/${article.authorId}`}>
                                 <Image
                                     w={100} borderRadius={50}

@@ -18,10 +18,14 @@ const ReviewArticles: React.FC = (): JSX.Element => {
         fetchData();
     }, []);
 
-    const onPageClick = (page: number) => async () => {
+    const onPageClick = async (page: number)  => {
         const {data} = await request.get<undefined, AxiosResponse<GetArticlesForReviewResult>>(`/article/getArticlesForReview?page=${page}`);
         const {articles} = data;
-        setArticles(articles);
+        if(articles.length) {
+            setArticles(articles);
+            return true;
+        }
+        return false;
     }
 
     return (
@@ -31,7 +35,7 @@ const ReviewArticles: React.FC = (): JSX.Element => {
                 <ArticlesList articles={articles} review={true} />
                 )
             </Stack>
-            <Paginator items={articles} onPageClick={onPageClick} />
+            <Paginator render={onPageClick} />
         </Box>
     )
 }

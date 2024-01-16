@@ -45,14 +45,19 @@ const GetReports: React.FC = (): JSX.Element => {
         }
     }
 
-    const onPageClick = (page: number) => async () => {
+    const onPageClick = async (page: number) => {
         const {data} = await request.get<undefined, AxiosResponse<GetReportsResult>>(`/article/getReports?page=${page}`);
         const {reports} = data;
-        setReports(reports);
+
+        if(reports.length) {
+            setReports(reports);
+            return true;
+        }
+        return false;
     }
 
     const onDeleteUserClick = (userId: string) => async () => {
-        const {data} = await request.delete<undefined, AxiosResponse<DeleteReportResult>>(`/article/deleteUser/${userId}`);
+        const {data} = await request.delete<undefined, AxiosResponse<DeleteReportResult>>(`/users/deleteUser/${userId}`);
         if(data.success) {
             if(reports) {
                 const newReports = reports.map((report) => {
@@ -79,7 +84,6 @@ const GetReports: React.FC = (): JSX.Element => {
                                 ? <Flex m={2}>
                                     <Image src={report.user.avatar ?? `${process.env.PUBLIC_URL}/images/avatar-placeholder.jpg`} alt={'could not load avatar'} w={50} borderRadius={25}/>
                                     <Link m={3} as={ReactLink} to={`/users/${report.user.id}`}>{report.user.nickname}</Link>
-                                    <Button background={'red'}>Видалити користувача</Button>
                                 </Flex>
                                 : <Flex m={2}>
                                     <Image src={`${process.env.PUBLIC_URL}/images/avatar-placeholder.jpg`} w={50} borderRadius={25} />
@@ -88,10 +92,14 @@ const GetReports: React.FC = (): JSX.Element => {
                             }
                             <Button m={2} onClick={removeReport(report.id)}>Видалити скаргу</Button>
                             <Link as={ReactLink} to={`/articles/${report.comment.articleId}`}>Стаття</Link>
+                            { report.comment.author &&
+                                <Button onClick={onDeleteUserClick(report.comment.authorId)} background={'red'} ml={3}>Видалити
+                                    автора коментаря</Button>
+                            }
                             <Comment comment={report.comment} renderDeleteButton={true} renderReportButton={false} removeComment={removeComment}/>
                         </Box>
                     })}
-                    <Paginator items={reports} onPageClick={onPageClick} />
+                    <Paginator render={onPageClick} />
                 </Box>
             )
             }

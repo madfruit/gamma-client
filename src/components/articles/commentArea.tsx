@@ -59,14 +59,15 @@ const CommentArea: React.FC<CommentAreaProps> = (props): JSX.Element => {
         const newComments = comments.slice();
         newComments.push(newComment);
         setComments(newComments);
+        setCommentText('');
     }
 
 
     return (
-        <Box>
+        <Box m={5}>
             {currentUser && (
                 <Box>
-                    <Heading>Додати коментар:</Heading>
+                    <Heading mb={3}>Додати коментар:</Heading>
                     <Box>
                         <Textarea value={commentText} onChange={onTextChange} w={600}/>
                     </Box>
@@ -77,7 +78,7 @@ const CommentArea: React.FC<CommentAreaProps> = (props): JSX.Element => {
                 </Box>
             )
             }
-            <Heading>Коментарі: </Heading>
+            <Heading mt={3}>Коментарі: </Heading>
             <CommentsList comments={comments} renderDeleteButton={false} renderReportButton={true} renderArticleLink={false} />
         </Box>
     )

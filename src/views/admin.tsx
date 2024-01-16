@@ -23,20 +23,20 @@ const Admin: React.FC = (): JSX.Element => {
     switch (currentUser.role) {
         case Role.AUTHOR:
             return (
-                <Box>
-                    <Heading m={5}>Welcome to the {currentUser.role} page!</Heading>
+                <Box m={3}>
+                    <Heading m={5}>Сторінка автора</Heading>
                     <Flex>
                         <Box m={5}>
                             <Link as={ReactLink} to={'/articles/writeArticle'}>
                                 <Box>
-                                    Write an article
+                                    Написати статтю
                                 </Box>
                             </Link>
                         </Box>
                         <Box m={5}>
                             <Link as={ReactLink} to={'/admin/reviewArticles'}>
                                 <Box>
-                                    Review an article
+                                    Рецензувати статтю
                                 </Box>
                             </Link>
                         </Box>
@@ -45,12 +45,12 @@ const Admin: React.FC = (): JSX.Element => {
             );
         case Role.ADMIN:
             return (
-                <Box>
-                    <Heading>Welcome to the {currentUser.role} page!</Heading>
+                <Box m={3}>
+                    <Heading>Сторінка адміністратора</Heading>
                     <Box m={5}>
                         <Link as={ReactLink} to={'/admin/manageRoles'}>
                             <Box>
-                                Manage roles
+                                Управління ролями
                             </Box>
                         </Link>
                     </Box>
@@ -58,13 +58,13 @@ const Admin: React.FC = (): JSX.Element => {
             );
         case Role.MODERATOR:
             return (
-                <Box>
-                    <Heading>Welcome to the {currentUser.role} page!</Heading>
+                <Box m={3}>
+                    <Heading>Сторінка модератора</Heading>
                     <Flex>
                         <Box m={5}>
                             <Link as={ReactLink} to={'/admin/getReports'}>
                                 <Box>
-                                    Get reported comments
+                                    Переглянути скарги
                                 </Box>
                             </Link>
                         </Box>

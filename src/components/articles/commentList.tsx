@@ -21,10 +21,7 @@ const CommentsList: React.FC<CommentProps> = (props): JSX.Element => {
     const removeComment = (commentId: string) => async () => {
         const {data} = await request.delete<undefined, AxiosResponse<DeleteCommentResult>>(`/article/deleteComment/${commentId}`);
         if(data.success) {
-            const comment = comments.find(c => c.id === commentId);
-            if(comment) {
-                setStateComments(stateComments.splice(stateComments.indexOf(comment), 1));
-            }
+            setStateComments(stateComments.filter(c => c.id !== commentId));
         }
     }
 
@@ -47,12 +44,15 @@ const CommentsList: React.FC<CommentProps> = (props): JSX.Element => {
                 return (
                     <Box key={comment.id} m={5} w={600}>
                         <Flex>
+                            <Box>
                             <Image
                                 src={comment.author ? comment.author.avatar
                                         ? comment.author.avatar
                                         : `${process.env.PUBLIC_URL}/images/avatar-placeholder.jpg`
                                     : `${process.env.PUBLIC_URL}/images/avatar-placeholder.jpg`}
                                 w={50} borderRadius={25}/>
+                                <Box />
+                                </Box>
                             {comment.author
                                 ? (
                                     <Link as={ReactLink} to={`/users/${comment.author.id}`}>
@@ -66,7 +66,10 @@ const CommentsList: React.FC<CommentProps> = (props): JSX.Element => {
                             }
                             <Text ml={100}>{new Date(comment.createdAt).toLocaleString('uk-UA')}</Text>
                             <Flex>
-                                <IconButton ml={5} icon={<WarningIcon/>} aria-label={'Поскаржитись на коментар'} onClick={onAddReportClick(comment.id)}/>
+                                { currentUser && currentUser.id !== comment.authorId &&
+                                    <IconButton ml={5} icon={<WarningIcon/>} aria-label={'Поскаржитись на коментар'}
+                                                onClick={onAddReportClick(comment.id)}/>
+                                }
                                 { currentUser && currentUser.role === Role.MODERATOR &&
                                 <CloseButton mt={1} onClick={removeComment(comment.id)} />
                                 }

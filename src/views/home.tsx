@@ -18,15 +18,15 @@ const Home: React.FC = (): JSX.Element => {
     useEffect(() => {
         fetchData();
     }, []);
-    const onPageClick = (page: number) => async () => {
+    const onPageClick = async (page: number) => {
         const {data} = await request.get<undefined, AxiosResponse<SearchArticlesResult>>(`/article/searchArticles?page=${page}`);
         const {articles} = data;
-        setArticles(articles);
+        articles.length && setArticles(articles);
     }
     return (
         <Box>
             <ArticlesList articles={articles} review={false} />
-            <Paginator items={articles} onPageClick={onPageClick} />
+            <Paginator render={onPageClick} />
         </Box>
     )
 }

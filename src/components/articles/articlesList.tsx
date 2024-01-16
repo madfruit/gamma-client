@@ -32,7 +32,13 @@ const ArticlesList: React.FC<ArticlesListProps> = (props): JSX.Element => {
     const [orderBy, setOrderBy] = useState('viewCount');
     const [order, setOrder] = useState('DESC');
     const currentUser = useAppSelector(state => state.user.value);
+    const searchBarPlaceholder = review ? 'Шукайте за назвою' : 'Шукайте за назвою або тегами (#тег1;#тег2;...)';
     const handleClick = async () => {
+        if(review) {
+            const {data} = await request.get<undefined, AxiosResponse<SearchArticlesResult>>(`/article/getArticlesForReview?title=${searchText}&order=${order}&orderBy=${orderBy}&page=1`);
+            setArticles(data.articles);
+            return;
+        }
         const {data} = await request.get<undefined, AxiosResponse<SearchArticlesResult>>(`/article/searchArticles?text=${searchText}&order=${order}&orderBy=${orderBy}&page=1`);
         setArticles(data.articles);
     }
@@ -73,11 +79,11 @@ const ArticlesList: React.FC<ArticlesListProps> = (props): JSX.Element => {
         setArticles(fetchedArticles)
     }, [fetchedArticles]);
     return (
-        <Box>
+        <Box m={5}>
             <Flex>
                 <InputGroup size='lg' m={8} w={1200}>
                     <Input onChange={onSearchTextChange}
-                           placeholder={'Шукайте за назвою, текстом, або тегами (#тег1;#тег2;...)'}/>
+                           placeholder={searchBarPlaceholder}/>
                     <InputRightElement mt={1} width='6.5rem' height={'2.5rem'}>
                         <Button m={2} h='1.75rem' size='lg' onClick={handleClick}>Шукати</Button>
                     </InputRightElement>

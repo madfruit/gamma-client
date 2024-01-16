@@ -39,7 +39,7 @@ const Comment: React.FC<CommentProps> = (props): JSX.Element => {
                 }
                 <Text ml={100}>{new Date(comment.createdAt).toLocaleString('uk-UA')}</Text>
                 <Box>
-                    {renderReportButton && addReport && (
+                    {currentUser && currentUser.id !== comment.authorId && renderReportButton && addReport && (
                         <IconButton ml={5} icon={<WarningIcon/>} aria-label={'Поскаржитись на коментар'}
                                     onClick={addReport(comment.id)}/>
                     )}

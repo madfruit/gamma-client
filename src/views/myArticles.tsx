@@ -26,19 +26,24 @@ const MyArticles: React.FC = (): JSX.Element => {
         fetchData();
     }, []);
 
-    const onPageClick = (page: number) => async () => {
+    const onPageClick = async (page: number) => {
         if(!user) {
             return navigate('/error401');
         }
         const {data} = await request.get<undefined, AxiosResponse<SearchArticlesResult>>(`/article/getArticlesByAuthor?authorId=${user.id}&page=${page}`);
         const {articles} = data;
-        setArticles(articles);
+
+        if(articles.length) {
+            setArticles(articles);
+            return true;
+        }
+        return false;
     }
 
     return (
         <Box>
             <ArticlesList articles={articles} review={false} />
-            <Paginator items={articles} onPageClick={onPageClick} />
+            <Paginator render={onPageClick} />
         </Box>
     )
 }
